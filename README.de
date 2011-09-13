@@ -1,0 +1,103 @@
+================================================================================
+xdbfilter snippet
+================================================================================
+xdbfilter durchsucht eine beliebige Datenbanktabelle nach definierbaren Feldern 
+und generiert entsprechende Filterboxen mit den gefundenen Werten. 
+
+================================================================================
+Funktionsweise:
+================================================================================
+Je nach Markierung der Filter-Checkboxen wird ein Platzhalter geliefert, der 
+eine Liste eines definierbaren Feldes aus den gefilterten Datensätzen enthält.
+Dieser Platzhalter kann dann z.B. in maxigallery im Parameter &pic_query_ids 
+oder in Ditto im Parameter &documents eingesetzt werden.
+
+xdbfilter kann auch ohne die Filterboxen eingesetzt werden indem die filter 
+z.B. nur mit dem &filters Parameter gesetzt werden und die Ausgabe mit 
+&display=`0` unterdrückt wird.
+
+xdbfilter unterstützt auch das Filtern von Dokumenten anhand von Werten in TVs,
+allerdings ohne @-Bindings.
+
+================================================================================
+Parameter:
+================================================================================
+filters         wird nur benötigt wenn man einen Filter per parameter 
+                vorbelegen will. wird durch $_GET bzw. $_REQUEST im script 
+                überschrieben. (Standard: leer)
+filterFields    für die hier angegebenen Felder werden Filterboxen generiert. 
+                Template Variablen müssen den Prefix 'tv' enthalten.
+                (Standard: leer)
+showempty       zeigt eine Checkbox mit der Beschriftung des Parameterwertes. 
+                Markieren bewirkt, dass alle Datensätze geliefert werden, deren 
+                entsprechendes Feld leer ist. (Standard: 0)
+refine          bewirkt eine eingrenzende Suche. (Standard: 0)
+preselect       wird genau wie filters benutzt. Es wird eine nicht 
+                überschreibbare Vorauswahl der Datensätze getroffen, die durch 
+                &filters im Link bzw. durch die Auswahl der Checkboxen weiter 
+                verfeinert werden kann. (Standard: leer)
+tablename       beliebige Datenbank Tabelle (Standard: 'site_content')
+sql             eine sql-select Anweisung als Datenquelle (Standard: leer)
+where           eine where Angabe für die standard sql-select Anweisung von 
+                xdbfilter (Standard: leer)
+outputFields    eine kommaseparierte Liste von Datenbankfeldern, deren 
+                Feldinhalte (aus den gefilterten Datensätzen) in Form einer 
+                kommaseparierten Liste in einem Platzhalter im Format 
+                [+xdbf_FELDNAME+] ausgegeben werden. (Standard: 'id')
+                z.B. erzeugt &outputfields=`id:|,pagetitle` Platzhalter die 
+                Platzhalter [+xdbf_id+] und [+xdbf_pagetitle+]. Wenn das 
+                Trennzeichen kein Komma sein soll, so kann ein Trennzeichen in 
+                der Form :TRENNZEICHEN für jedes Feld angegeben werden.
+includeTvs      Die TVs der Dokumente werden mit ausgelesen. (Standard: 0)
+id              Eine eindeutige id, falls das Snippet mehrmals auf einer Seite 
+                verwendet wird. Erzeugte Platzhalter -> [+id_xdbf_FELDNAME+] - 
+                Stichwort Verschachtelung von Platzhaltern und Filteraufruf 
+                oder innerhalb eines Ditto-Templates! (Standard: leer)
+display         Filterboxen anzeigen (Default: 1)
+ultiselectTvs   eine kommaseparierte Liste von Datenbankfeldern, deren 
+                Feldinhalte mehrere Werte gleichzeitig annehmen können 
+                (z.B. Multi-Select Listboxen) 
+
+WICHTIG: Ein Snippet-Parameter kann NICHT das '=' Zeichen enthalten. Stattdessen 
+muss 'eq' benutzt werden (Gilt für die Parameter &sql und &where).
+
+================================================================================
+Beispiele
+================================================================================
+&filters=tvKategorie(Ringe|Ohrschmuck)||parent([*id*])||tvLegierung(585Gg|585Wg)
+Es werden alle Dokumente gefunden welche in der TV Kategorie die Werte 'Ringe'
+oder 'Ohrschmuck' enthalten und Unterordner der aktuellen Seite sind und in der 
+TV Legierung '585Gg' oder '585Wg' enthalten.
+
+Platzhalter (siehe auch Beispieltemplates):
+[+xdbf_FELDNAME+] bzw. [+id_xdbf_FELDNAME+] in Verbindung mit dem Parameter &id
+[+filterlink+] um per GET oder REQUEST erhaltene Parameter weitergeben zu 
+können. z.B. weiter, vorige-Buttons in Ditto-Paginationen oder [+id_filterlink+] 
+in Verbindung mit dem Parameter &id   
+
+--------------------------------------------------------------------------------
+Beispiel MaxiGallery
+--------------------------------------------------------------------------------
+[!xdbfilter? &filterOuterTpl=`filterOuterTpl` &filterTpl=`filterTpl` 
+&filterItemTpl=`filterItemTpl` &filterFields=`Steinbesatz,title,filename` 
+&filters=`steinbesatz(Brillant|Citrin)||title(ring)` &showempty=`wenn leer`!] 
+[!MaxiGallery? &display=`embedded` &embedtype=`slimbox` 
+&galleryPictureTpl=`gallerypicturetpl` &customFields=`Steinbesatz` 
+&managePictureTpl=`managePictureTpl` &galleryOuterTpl=`galleryOuterTpl`
+&pageNumberTpl=`pagenumbertpl` &pics_per_page=`20` 
+&pic_query_ids=`[+xdbf_id+]`!]  
+
+--------------------------------------------------------------------------------
+Beispiel Ditto
+--------------------------------------------------------------------------------
+[!xdbfilter? &refine=`1` &preselect=`` &tablename=`site_content`
+&filterOuterTpl=`filterOuterTpl` &filterTpl=`filterTpl`
+&filterItemTpl=`filterItemTpl` &filterFields=`parent,published,type,pagetitle` 
+&showempty=`ohne Inhalt` &outputfield=`id`!] 
+[!Ditto? &documents=`[+xdbf_id+]` &display=`all`!] 
+
+================================================================================
+Weitere Anmerkungen
+================================================================================
+Im Verzeichnis chunkie/modifiers befinden sich zwei in den Beispieltemplates
+benutzte PHx Modifier
