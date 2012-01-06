@@ -66,7 +66,8 @@ $xdbconfig['multiselectTvs'] = (isset($multiselectTvs)) ? $multiselectTvs : '';
 
 $xdbconfig['id_'] = isset($id) ? $id.'_' : '';
 $xdbconfig['preselect_arr'] = (trim($xdbconfig['preselect']) !== '') ? explode('||', $xdbconfig['preselect']) : array();
-$xdbconfig['multiselectTvs_arr'] = (trim($xdbconfig['multiselectTvs']) !== '') ? explode(',', $xdbconfig['multiselectTvs']) : array(); ;
+$xdbconfig['multiselectTvs_arr'] = (trim($xdbconfig['multiselectTvs']) !== '') ? explode(',', $xdbconfig['multiselectTvs']) : array();
+;
 $xdbconfig['where'] = str_replace('eq', '=', $xdbconfig['where']);
 $xdbconfig['sql'] = str_replace('eq', '=', $xdbconfig['sql']);
 
@@ -224,7 +225,7 @@ if ($xdbconfig['display']) {
 
 		foreach ($filterRows as $row) {
 			if (in_array($filterField, $xdbconfig['multiselectTvs_arr']) && !empty($row[$filterField])) {
-				array_push($multiselectTvValues, $row[$xdbconfig['multiselectTvs']]);
+				array_push($multiselectTvValues, $row[$filterField]);
 			}
 			if (!in_array($row[$filterField], $filterFieldValues) && !empty($row[$filterField])) {
 				array_push($filterFieldValues, $row[$filterField]);
