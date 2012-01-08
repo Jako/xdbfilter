@@ -152,32 +152,47 @@ $xdb->sql = $xdbconfig['sql'];
 $outerTplData = array();
 $pictureTplData = array();
 $filterTplData = array();
+$allrows = array();
 
 // Display filter form
 if ($xdb->xdbconfig['debug']) {
     echo '<pre>'.print_r($xdb, true).'</pre>';
 }
 
-$allrows = array();
 if ($xdb->sql != '') {
     $rs = $modx->db->query($query);
 } else {
-    if ($xdb->xdbconfig['includeTvs'] && $xdbconfig['tablename'] == 'site_content') {
+    if ($xdb->xdbconfig['includeTvs'] && $xdb->xdbconfig['tablename'] == 'site_content') {
+
+        // set query filter
         $where = $xdb->xdbconfig['where'].($xdb->xdbconfig['showempty'] === "0" ? (strlen($xdb->xdbconfig['where']) ? " AND " : "")."tvc.value IS NOT NULL AND tvc.value <> '[]'" : "");
 
+        // set field names
+        $docfields = $xdb->xdbconfig['outputFields'];
         $tvnames = array();
 
         foreach ($xdb->xdbconfig['filterFields'] as $field) {
-            $tvnames[] = (strpos($field, "tv") === 0) ? substr($field, 2) : $field;
+            if (strpos($field, "tv") === 0)
+                $tvnames[] = substr($field, 2);
+            else
+                $docfields = array_push($docfields, $field);
         }
+        
+        // remove double entries
+        $docfields = array_unique($docfields);
+        $tvnames = array_unique($tvnames);
+        
 
-        $templatevars = $xdb->getAllTemplateVars("id", $tvnames, "name", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
+        // get a list of all documents and their tv values from the database
+        $vars = $xdb->getAllVars($docfields, $tvnames, "name", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
 
-        if (is_array($templatevars) && count($templatevars)) {
-            foreach ($templatevars as $pos => $tv) {
-                $allrows[$pos] = $tv;
-                $value = str_replace(array('{{', '}}'), '', $tv['tvValue']);
-                $allrows[$pos]['tv'.$tv['tvName']] = $value;
+        if (is_array($vars) && count($vars)) {
+            foreach ($vars as $pos => $var) {
+                $allrows[$pos] = $var;
+                if (isset($var['tvValue'])) {
+                    $value = str_replace(array('{{', '}}'), '', $var['tvValue']);
+                    $allrows[$pos]['tv'.$var['tvName']] = $value;
+                }
             }
         }
     } else {

@@ -118,7 +118,7 @@ class xdbfilter {
     // function to get all template vars
     // ---------------------------------
     
-    function getAllTemplateVars($docFields = "*", $tvs = "*", $tvFields = "*", $where = "", $orderby = "", $limit = "", $offset = "0") {
+    function getAllVars($docFields = "*", $tvs = "*", $tvFields = "*", $where = "", $orderby = "", $limit = "", $offset = "0") {
         global $modx;
         if (!is_array($tvs) && ($tvs === ""))
             $tvs = "*";
@@ -128,10 +128,13 @@ class xdbfilter {
         // get document fields
         if ($docFields === "*")
             $docFields = "doc.*";
-        else
+        elseif (!is_array($docFields))
             $docFields = explode(',', $docFields);
 
-        $docFields = "doc.".implode(',doc.', $docFields);
+        for ($i = 0, $count = count($docFields); $i < $count; ++$i) {
+            $docFields[$i] = "doc.".trim($docFields[$i]);
+        }
+        $docFields = implode(',', $docFields);
 
         // get user defined template variables
         if (($tvs !== "*") && !is_array($tvs)) {
@@ -145,7 +148,7 @@ class xdbfilter {
             $tvFields = explode(',', $tvFields);
 
         for ($i = 0, $count = count($tvFields); $i < $count; ++$i) {
-            $tvFields[$i] = "tv.".$tvFields[$i]." AS tv".ucfirst($tvFields[$i]);
+            $tvFields[$i] = "tv.".($tvFields[$i] = trim($tvFields[$i]))." AS tv".ucfirst($tvFields[$i]);
         }
         $tvFields = implode(',', $tvFields);
 
@@ -159,7 +162,7 @@ class xdbfilter {
         // query
         $sql =
             "SELECT ".
-            $docFields.",".$tvFields.", IF(tvc.value!='',tvc.value,tv.default_text) as tvValue ".
+                $docFields.",".$tvFields.", IF(tvc.value!='',tvc.value,tv.default_text) as tvValue ".
             "FROM ( ".
                 $modx->getFullTableName('site_content')." AS doc, ".
                 $modx->getFullTableName('site_tmplvars')." AS tv ) ".
