@@ -207,7 +207,7 @@ if (isset($rs)) {
 }
 
 if ($xdb->xdbconfig['debug']) {
-    file_put_contents(MODX_BASE_PATH.XDBFILTER_PATH.'dbresult.txt', var_export($templatevars,true));
+    file_put_contents(MODX_BASE_PATH.XDBFILTER_PATH.'dbresult.txt', var_export($vars,true));
 }
 
 
