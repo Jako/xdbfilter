@@ -141,6 +141,7 @@ class xdbfilter {
             $tvs = preg_replace("/^\s/i", "", explode(',', $tvs));
         }
 
+        // get the names of the database fields of template variables
         if ($tvFields === "*") {
             $table = $modx->db->select('*', $modx->getFullTableName('site_tmplvars'));
             $tvFields = $modx->db->getColumnNames($table);

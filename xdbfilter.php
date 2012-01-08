@@ -171,30 +171,31 @@ if ($xdb->sql != '') {
         $docfields = $xdb->xdbconfig['outputFields'];
         $tvnames = array();
 
-        foreach ($xdb->xdbconfig['filterFields'] as $field) {
+        foreach ($xdb->filterFields as $field) {
             if (strpos($field, "tv") === 0)
                 $tvnames[] = substr($field, 2);
             else
-                $docfields = array_push($docfields, $field);
+                array_push($docfields, $field);
         }
-        
+
         // remove double entries
         $docfields = array_unique($docfields);
         $tvnames = array_unique($tvnames);
-        
 
         // get a list of all documents and their tv values from the database
-        $vars = $xdb->getAllVars($docfields, $tvnames, "name", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
+        $allrows = $xdb->getAllVars($docfields, $tvnames, "name", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
 
-        if (is_array($vars) && count($vars)) {
-            foreach ($vars as $pos => $var) {
-                $allrows[$pos] = $var;
+        if (is_array($allrows) && count($allrows)) {
+            // get tv values
+            foreach ($allrows as $pos => $var) {
                 if (isset($var['tvValue'])) {
                     $value = str_replace(array('{{', '}}'), '', $var['tvValue']);
                     $allrows[$pos]['tv'.$var['tvName']] = $value;
                 }
             }
-        }
+        } else
+            $allrows = array();
+
     } else {
         $rs = $modx->db->select('*', $modx->db->config['table_prefix'].$xdb->xdbconfig['tablename'], $xdb->xdbconfig['where'], '', $xdb->xdbconfig['offset'].','.$xdb->xdbconfig['limit']);
     }
