@@ -177,20 +177,24 @@ if ($xdb->sql != '') {
             else
                 array_push($docfields, $field);
         }
-
+        
         // remove double entries
         $docfields = array_unique($docfields);
         $tvnames = array_unique($tvnames);
-
+        
         // get a list of all documents and their tv values from the database
-        $allrows = $xdb->getAllVars($docfields, $tvnames, "name", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
+        $allrows = $xdb->getAllVars($docfields, $tvnames, "name,elements", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
 
         if (is_array($allrows) && count($allrows)) {
             // get tv values
             foreach ($allrows as $pos => $var) {
                 if (isset($var['tvValue'])) {
-                    $value = str_replace(array('{{', '}}'), '', $var['tvValue']);
-                    $allrows[$pos]['tv'.$var['tvName']] = $value;
+                    $value = $var['tvValue'];
+                    if (stripos($val = trim($value), '@eval') === 0) {
+                        $value = eval(ltrim(substr($val, 5), " :"));
+                    }
+                    $value = str_replace(array('{{', '}}'), '', $value);
+                    $allrows[$pos]['tv'.$var['tvName']] = array('value' => $value, 'elements' => $var['tvElements']);
                 }
             }
         } else
@@ -208,7 +212,7 @@ if (isset($rs)) {
 }
 
 if ($xdb->xdbconfig['debug']) {
-    file_put_contents(MODX_BASE_PATH.XDBFILTER_PATH.'dbresult.txt', var_export($vars,true));
+    file_put_contents(MODX_BASE_PATH.XDBFILTER_PATH.'output.txt', var_export($allrows,true));
 }
 
 
@@ -230,7 +234,7 @@ foreach ($xdbconfig['outputFields'] as $field) {
     $field = $fieldarr[0];
     $delimiter = count($fieldarr[1]) > 0 ? $fieldarr[1] : ',';
     foreach ($rows as $row) {
-        $listid[] = $row[$field];
+        $listid[] = is_array($row[$field]) ? $row[$field]['value'] : $row[$field];
     }
     $listid = implode($delimiter, array_unique($listid));
     $listid = preg_replace('/'.$delimiter.'$/', '', $listid);
@@ -254,11 +258,12 @@ if ($xdbconfig['display']) {
         $multiselectTvValues = array();
 
         foreach ($filterRows as $row) {
-            if (in_array($filterField, $xdbconfig['multiselectTvs_arr']) && !empty($row[$filterField])) {
-                array_push($multiselectTvValues, $row[$filterField]);
+            $filterRowVal = is_array($row[$filterField]) ? $row[$filterField]['value'] : $row[$filterField];
+            if (in_array($filterField, $xdbconfig['multiselectTvs_arr']) && !empty($filterRowVal)) {
+                array_push($multiselectTvValues, $filterRowVal);
             }
-            if (!in_array($row[$filterField], $filterFieldValues) && !empty($row[$filterField])) {
-                array_push($filterFieldValues, $row[$filterField]);
+            if (!in_array($filterRowVal, $filterFieldValues) && !empty($filterRowVal)) {
+                array_push($filterFieldValues, $filterRowVal);
             }
         }
         if (in_array($filterField, $xdbconfig['multiselectTvs_arr'])) {
@@ -273,6 +278,7 @@ if ($xdbconfig['display']) {
 
         $counter = 0;
         if (count($filterFieldValues) > 0) {
+            
             $filters = array();
             if ($xdbconfig['filters_arr'] > 0) {
                 foreach ($xdbconfig['filters_arr'] as $filter) {
@@ -283,7 +289,37 @@ if ($xdbconfig['display']) {
                 }
             }
 
-            foreach ($filterFieldValues as $value) {
+            
+            if (strpos($filterField, "tv") === 0) {
+                $i = count($filterRows);
+                while (!isset($filterRows[$i][$filterField]) && (--$i > -1));
+                if (isset($filterRows[$i][$filterField]['elements'])) {
+                    $elements = $filterRows[$i][$filterField]['elements'];
+                    if (stripos($val = trim($elements), '@eval') === 0) {
+                        $elements = eval(ltrim(substr($val, 5), " :"));
+                    }
+                    $elements = explode("||", $elements);
+                    for ($i = 0, $count = count($elements); $i < $count; ++$i) {
+                        list($optionName, $optionValue) = explode("==", $elements[$i]);
+                        $elements[$i] = isset($optionValue) ? $optionValue : $optionName;
+                        $optionNames[$i] = $optionName;
+                    }
+                    
+                    // sort option list
+                    $new = array();
+                    foreach ($filterFieldValues as $val) {
+                        $val = ($pos = strpos($val, "||")) === false ? $val : substr($val, 0, $pos);
+                        if (($pos = array_search($val, $elements)) !== false)
+                            $new[$pos] = array('value' => $val, 'name' => $optionNames[$pos]);
+                    }
+                    ksort($new);
+                    
+                    $filterFieldValues = $new;
+                }
+            }
+
+            foreach ($filterFieldValues as $field) {
+                $value = isset($field['value']) ? $field['value'] : $field;
                 $filterValues = strtolower($filters[$filterField]);
                 $values = explode('|', $filterValues);
                 if (in_array(strtolower($value), $values)) {
@@ -294,6 +330,7 @@ if ($xdbconfig['display']) {
                 $filterItemTplData['filteritem'] = trim($filterField, 'tv');
                 $filterItemTplData['filteritemname'] = $filterField.'[]';
                 $filterItemTplData['filteritemvalue'] = $value;
+                $filterItemTplData['filteritemcaption'] = isset($field['name']) ? $field['name'] : $field;
                 $tpl = new xdbfChunkie($xdb->xdbconfig['filterItemTpl']);
                 $tpl->addVar('xdbfilter', $filterItemTplData);
                 $filterTplData['filteritems'] .= $tpl->Render();

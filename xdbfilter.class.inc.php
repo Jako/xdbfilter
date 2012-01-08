@@ -41,6 +41,7 @@ class xdbfilter {
                 $pusharray = 1;
             } else {
                 foreach ($filterBys as $filterBy) {
+                    $filterRowVal = isset($row[$filterBy]['value']) ? $row[$filterBy]['value'] : $row[$filterBy];
                     $pusharray = 0;
                     $filterValues = $filters[$filterBy];
                     if ($filterValues == '')
@@ -50,24 +51,24 @@ class xdbfilter {
                         $values = explode("|", $filterValues);
                         foreach ($values as $filterValue) {
 
-                            if ($xdbconfig['showempty'] == $filterValue && (trim($row[$filterBy]) == '' || empty($row[$filterBy]))) {
+                            if ($xdbconfig['showempty'] == $filterValue && (trim($filterRowVal) == '' || empty($filterRowVal))) {
                                 $pusharray = 1;
-                            } elseif (trim($row[$filterBy]) !== '' && !empty($row[$filterBy])) {
+                            } elseif (trim($filterRowVal) !== '' && !empty($filterRowVal)) {
                                 // If filterTv is a multiselectTv
                                 if (in_array($filterBy, $multiselectTvs_arr)) {
                                     // If filterTv value matches one part of the multiseletTv value
-                                    if (in_array($filterValue, explode('||', $row[$filterBy]))) {
+                                    if (in_array($filterValue, explode('||', $filterRowVal))) {
                                         $pusharray = 1;
                                     }
                                 } else {
                                     // If filterTv is equal to the value
-                                    if (strtolower($row[$filterBy]) == strtolower($filterValue)) {
+                                    if (strtolower($filterRowVal) == strtolower($filterValue)) {
                                         $pusharray = 1;
                                     }
                                 }
                             }
                         }
-                    } elseif (!empty($row[$filterBy]) || trim($row[$filterBy]) !== '') {
+                    } elseif (!empty($filterRowVal) || trim($filterRowVal) !== '') {
                         $pusharray = 0;
                     }
                     if ($pusharray == 0)
