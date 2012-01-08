@@ -29,11 +29,11 @@ $xdbconfig['debug'] = (isset($debug)) ? $debug : 0;
 // MODX tablename (defaults to site_content)
 $xdbconfig['tablename'] = (isset($tablename)) ? $tablename : 'site_content';
 // Chunkname for the filter boxes outer template (@FILE: or @CODE: binding possible)
-$xdbconfig['filterOuterTpl'] = (isset($filterOuterTpl)) ? $filterOuterTpl : '@FILE:'.XDBFILTER2_PATH.'templates/filterOuterTpl.html';
+$xdbconfig['filterOuterTpl'] = (isset($filterOuterTpl)) ? $filterOuterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterOuterTpl.html';
 // Chunkname for a filter box template (@FILE: or @CODE: binding possible)
-$xdbconfig['filterTpl'] = (isset($filterTpl)) ? $filterTpl : '@FILE:'.XDBFILTER2_PATH.'templates/filterTpl.html';
+$xdbconfig['filterTpl'] = (isset($filterTpl)) ? $filterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterTpl.html';
 // Chunkname for a filter box single item template (@FILE: or @CODE: binding possible)
-$xdbconfig['filterItemTpl'] = (isset($filterItemTpl)) ? $filterItemTpl : '@FILE:'.XDBFILTER2_PATH.'templates/filterItemTpl.html';
+$xdbconfig['filterItemTpl'] = (isset($filterItemTpl)) ? $filterItemTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterItemTpl.html';
 // An unique id if there is more than one xdbfilter call on a page
 $xdbconfig['id'] = isset($id) ? $id : '';
 // Shows a checkbox with this string - if checked the filter displays all items in this section that have no value set in this section
@@ -116,7 +116,7 @@ $modx->setPlaceholder($xdbconfig['id_'].'filterlink', $link);
  * ---------------------- */
 
 if (!class_exists('xdbfilter')) {
-    $xdbclass = MODX_BASE_PATH.XDBFILTER2_PATH.'xdbfilter.class.inc.php';
+    $xdbclass = MODX_BASE_PATH.XDBFILTER_PATH.'xdbfilter.class.inc.php';
     if (file_exists($xdbclass)) {
         include_once ($xdbclass);
     } else {
@@ -134,7 +134,7 @@ if (class_exists('xdbfilter')) {
 }
 
 if (!class_exists('xdbfChunkie')) {
-    $chunkieclass = MODX_BASE_PATH.XDBFILTER2_PATH.'chunkie/chunkie.class.inc.php';
+    $chunkieclass = MODX_BASE_PATH.XDBFILTER_PATH.'chunkie/chunkie.class.inc.php';
     if (file_exists($chunkieclass)) {
         include_once $chunkieclass;
     } else {
