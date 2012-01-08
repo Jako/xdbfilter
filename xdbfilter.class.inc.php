@@ -160,15 +160,15 @@ class xdbfilter {
         $sql =
             "SELECT ".
             $docFields.",".$tvFields.", IF(tvc.value!='',tvc.value,tv.default_text) as tvValue ".
-            "\nFROM (".
+            "FROM ( ".
                 $modx->getFullTableName('site_content')." AS doc, ".
-                $modx->getFullTableName('site_tmplvars')." AS tv )".
-            "\nLEFT JOIN ".
+                $modx->getFullTableName('site_tmplvars')." AS tv ) ".
+            "LEFT JOIN ".
                 $modx->getFullTableName('site_tmplvar_contentvalues')." AS tvc ".
                 "ON (tvc.tmplvarid=tv.id) AND (tvc.contentid=doc.id) ".
-            "\nWHERE ".$where." ".
-            ($orderby !== "" ? "\nORDER BY ".$orderby : "").
-            ($limit !== "" ? "\nLIMIT ".$offset.",".$limit.";" : ";");
+            "WHERE ".$where." ".
+            ($orderby !== "" ? "ORDER BY ".$orderby." " : "").
+            ($limit !== "" ? "LIMIT ".$offset.",".$limit." " : "");
 
         $rs = $modx->db->query($sql);
         
