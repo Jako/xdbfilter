@@ -227,7 +227,7 @@ if (isset($rs)) {
 }
 
 if ($xdb->xdbconfig['debug']) {
-    file_put_contents(MODX_BASE_PATH.XDBFILTER_PATH.'output.txt', var_export($allrows,true));
+    $modx->logEvent(3, 1, "<pre>".htmlentities(var_export($allrows,true))."</pre>" , 'xdbfilter');
 }
 
 if (isset($xdb->xdbconfig['clear'])) {
