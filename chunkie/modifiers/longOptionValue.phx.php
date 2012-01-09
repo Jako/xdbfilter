@@ -9,11 +9,11 @@
 $result = $modx->db->select('name, elements', $modx->getFullTableName('site_tmplvars'));
 $members = $modx->db->makeArray($result);
 foreach ($members as $member) {
-    // @EVAL detection
-	if (substr($member['elements'], 0, 5) == '@EVAL') {
-		$member['elements'] = eval(ltrim(substr($member['elements'], 5), " :"));
-	}
 	if ($member['name'] == $options) {
+		// @EVAL detection
+		if (substr($member['elements'], 0, 5) == '@EVAL') {
+			$member['elements'] = eval(ltrim(substr($member['elements'], 5), " :"));
+		}
 		$optionValues = explode('||', $member['elements']);
 		foreach ($optionValues as $optionValue) {
 			$longOptionValue = explode('==', $optionValue);
