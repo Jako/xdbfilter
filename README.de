@@ -17,7 +17,7 @@ z.B. nur mit dem &filters Parameter gesetzt werden und die Ausgabe mit
 &display=`0` unterdrückt wird.
 
 xdbfilter unterstützt auch das Filtern von Dokumenten anhand von Werten in TVs,
-allerdings ohne @-Bindings.
+die meisten @-Bindings werden dabei nicht ausgewertet - Ausnahme @EVAL.
 
 ================================================================================
 Parameter:
@@ -69,7 +69,10 @@ Es werden alle Dokumente gefunden welche in der TV Kategorie die Werte 'Ringe'
 oder 'Ohrschmuck' enthalten und Unterordner der aktuellen Seite sind und in der 
 TV Legierung '585Gg' oder '585Wg' enthalten.
 
-Platzhalter (siehe auch Beispieltemplates):
+Platzhalter in den Snippet Templates:
+siehe Beispieltemplates
+
+Platzhalter außerhalb des Snippets:
 [+xdbf_FELDNAME+] bzw. [+id_xdbf_FELDNAME+] in Verbindung mit dem Parameter &id
 [+filterlink+] um per GET oder REQUEST erhaltene Parameter weitergeben zu 
 können. z.B. weiter, vorige-Buttons in Ditto-Paginationen oder [+id_filterlink+] 
@@ -99,5 +102,5 @@ Beispiel Ditto
 ================================================================================
 Weitere Anmerkungen
 ================================================================================
-Im Verzeichnis chunkie/modifiers befinden sich zwei in den Beispieltemplates
-benutzte PHx Modifier
+Im Verzeichnis chunkie/modifiers befindet sich ein in den Beispieltemplates
+benutzter PHx Modifier

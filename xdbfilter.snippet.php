@@ -2,12 +2,19 @@
 /*
  * xdbfilter
  * snippet to filter records from database
- * License GPL
- * Version 0.3.1 (13.09.2011)
- * Author: Bruno Perner <b.perner@gmx.de>
+ *
+ * @package xdbfilter
+ * @subpackage snippet_file
+ *
+ * @version 0.4 <09.01.2012>
+ * @author Bruno Perner <b.perner@gmx.de>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
- * Modifications: Thomas Jakobi <thomas.jakobi@partout.info>
+ * Modifications: 
+ * Jako <thomas.jakobi@partout.info>
  * - multiselectTvs, PHx Modifier
+ * Sammyboy <sam@gmx-topmail.de>
+ * - speed improvements, bugfixes
  * 
  * Parameters see README:
  */

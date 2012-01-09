@@ -1,7 +1,24 @@
 <?php
-/* ----------------------------------------------------------
- * This file includes the functions used in xdbfilter snippet
- * --------------------------------------------------------*/
+/*
+ * xdbfilter
+ * snippet to filter records from database
+ *
+ * @package xdbfilter
+ * @subpackage class_file
+ * includes the functions used in xdbfilter snippet
+ *
+ * @version 0.4 <09.01.2012>
+ * @author Bruno Perner <b.perner@gmx.de>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * 
+ * Modifications: 
+ * Jako <thomas.jakobi@partout.info>
+ * - multiselectTvs, PHx Modifier
+ * Sammyboy <sam@gmx-topmail.de>
+ * - speed improvements, bugfixes
+ * 
+ * Parameters see README:
+ */
 
 class xdbfilter {
     // Declaring private variables

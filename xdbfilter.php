@@ -1,8 +1,24 @@
 <?php
-/* -------------------------------------------------------------------------------
+/*
+ * xdbfilter
+ * snippet to filter records from database
+ *
+ * @package xdbfilter
+ * @subpackage main_file
  * Logic code for xdbfilter. Default parameter values can be changed in this file.
- * Do not touch anything unless you know what you are doing.
- * -----------------------------------------------------------------------------*/
+ *
+ * @version 0.4 <09.01.2012>
+ * @author Bruno Perner <b.perner@gmx.de>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * 
+ * Modifications: 
+ * Jako <thomas.jakobi@partout.info>
+ * - multiselectTvs, PHx Modifier
+ * Sammyboy <sam@gmx-topmail.de>
+ * - speed improvements, bugfixes
+ * 
+ * Parameters see README:
+ */
 
 global $modx;
 

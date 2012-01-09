@@ -17,8 +17,8 @@ selection. This placeholder can be i.e. used in MaxiGallery parameter
 xdbfilter can be used without the filterboxes too using only the &filters 
 parameter.
 
-custom template variables can be used too in xdbfilter (@ bindings are not
-evaluated).
+custom template variables can be used too in xdbfilter (most @ bindings are not
+evaluated - only @EVAL).
 
 ================================================================================
 Parameters:
@@ -63,7 +63,10 @@ Examples
 All documents are returned where TV Category is rings or earrings and which are
 subdocuments of the current document and where the TV alloy is 585Gg or 585Wg.
 
-Placeholder: see example templates
+Snippet Template Placeholder: 
+see example templates
+
+The following placeholder could be used outside of the Snippet:
 [+xdbf_FELDNAME+] or [+id_xdbf_FELDNAME+] with the parameter &id
 [+filterlink+] to link the GET or REQUEST parameter to other documents i.e. 
 previous & next links in Ditto or [+id_filterlink+] with the parameter &id.
@@ -93,5 +96,5 @@ Ditto example:
 ================================================================================
 Further notes
 ================================================================================
-The folder chunkie/modifiers contains two PHx modifier used in the example
+The folder chunkie/modifiers contains a PHx modifier used in the example
 templates.

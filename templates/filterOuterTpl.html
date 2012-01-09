@@ -1,15 +1,14 @@
 <form method="post" action="[~[*id*]~]" name="xdbfilter" id="xdbfilter">
 	<div id="xdbmenu">
+		<h3>Filter</h3>
 		<ul>
-			<li>
-				<h3>Filter</h3>
-				<ul>
-					[+xdbfilter.filterfields+]
-					<button type="submit" name="xdbfiltersubmit" value="submit" type="submit">
-						Filter anwenden
-					</button>
-				</ul>
-			</li>
+			[+xdbfilter.filterfields+]
 		</ul>
+		<button type="submit" name="xdbfiltersubmit" value="submit" type="submit">
+			Filter anwenden
+		</button>
+		<button type="submit" name="xdbfilterclear" value="reset">
+			Auswahl löschen
+		</button>
 	</div>
 </form>
