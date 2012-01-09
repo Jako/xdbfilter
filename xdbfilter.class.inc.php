@@ -41,7 +41,7 @@ class xdbfilter {
                 $pusharray = 1;
             } else {
                 foreach ($filterBys as $filterBy) {
-                    $filterRowVal = isset($row[$filterBy]['value']) ? $row[$filterBy]['value'] : $row[$filterBy];
+                    $filterRowVal = $row[$filterBy];
                     $pusharray = 0;
                     $filterValues = $filters[$filterBy];
                     if ($filterValues == '')
@@ -80,39 +80,6 @@ class xdbfilter {
             }
         }
         return $outputrows;
-    }
-
-    // -----------------------------
-    // function to get template vars
-    // -----------------------------
-
-    function getTemplateVars($idnames = array (), $fields = "*", $docid = "", $published = 1) {
-        global $modx;
-        if (($idnames != '*' && !is_array($idnames)) || count($idnames) == 0) {
-            return false;
-        } else {
-            $result = array();
-
-            // get user defined template variables
-            $fields = ($fields == "") ? "tv.*" : 'tv.'.implode(',tv.', preg_replace("/^\s/i", "", explode(',', $fields)));
-            $sort = ($sort == "") ? "" : 'tv.'.implode(',tv.', preg_replace("/^\s/i", "", explode(',', $sort)));
-            if ($idnames == "*")
-                $query = "tv.id<>0";
-            else
-                $query = (is_numeric($idnames[0]) ? "tv.id" : "tv.name")." IN ('".implode("','", $idnames)."')";
-
-            $sql = "SELECT $fields, IF(tvc.value!='',tvc.value,tv.default_text) as value ";
-            $sql .= "FROM ".$modx->getFullTableName('site_tmplvars')." tv ";
-            $sql .= "INNER JOIN ".$modx->getFullTableName('site_tmplvar_templates')." tvtpl ON tvtpl.tmplvarid = tv.id ";
-            $sql .= "LEFT JOIN ".$modx->getFullTableName('site_tmplvar_contentvalues')." tvc ON tvc.tmplvarid=tv.id AND tvc.contentid = '".$docid."' ";
-            $sql .= "WHERE ".$query;
-
-            $rs = $modx->dbQuery($sql);
-            for ($i = 0; $i < @$modx->recordCount($rs); $i++) {
-                array_push($result, @$modx->fetchRow($rs));
-            }
-            return $result;
-        }
     }
 
     // ---------------------------------
