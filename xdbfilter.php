@@ -189,7 +189,7 @@ if ($xdb->sql != '') {
         $docfields = $xdb->xdbconfig['outputFields'];
         if (($count = count($docfields)) > 0) {
             for ($i = 0; $i < $count; ++$i) {
-                if (strpos(ltrim($docfields[$i]), "tv") === 0)
+                if ((strpos(ltrim($docfields[$i]), "tv") === 0) || ($docfields[$i] == ""))
                     unset($docfields[$i]);
                 else {
                     $field = explode(":", $docfields[$i]);
@@ -207,8 +207,12 @@ if ($xdb->sql != '') {
         }
 
         // remove double entries
-        $docfields = array_unique($docfields);
-        $tvnames = array_unique($tvnames);
+        $vars = array('docfields', 'tvnames');
+        foreach ($vars as $var) {
+            ${$var} = array_unique(${$var});
+            sort(${$var});
+            reset(${$var});
+        }
 
         // get a list of all documents and their tv values from the database
         $allrows = $xdb->getAllVars($docfields, $tvnames, "name,elements", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
