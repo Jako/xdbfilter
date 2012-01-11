@@ -6,7 +6,7 @@
  * @package xdbfilter
  * @subpackage snippet_file
  *
- * @version 0.4 <09.01.2012>
+ * @version 0.5 <11.01.2012>
  * @author Bruno Perner <b.perner@gmx.de>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
