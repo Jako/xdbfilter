@@ -49,9 +49,6 @@ id              An unique id if there is more than one xdbfilter call on a page
                 Created placeholder will use the id as prefix
                 [+id_xdbf_FIELDNAME+] (Default: empty)
 display         Show the filterboxes (Default: 1)
-multiselectTvs  comma separated list of TVs that are defined as multiselect 
-                variables (the field contains a || separated list of possible 
-                values i.e. multi select listboxes. 
 
 IMPORTANT: A snippet parameter CAN'T contain the '=' character. Use 'eq' for 
 that (in parameters &sql and &where).
