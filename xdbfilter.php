@@ -7,7 +7,7 @@
  * @subpackage main_file
  * Logic code for xdbfilter. Default parameter values can be changed in this file.
  *
- * @version 0.4 <09.01.2012>
+ * @version 0.5 <11.01.2012>
  * @author Bruno Perner <b.perner@gmx.de>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
@@ -41,70 +41,67 @@ if (file_exists($configFile)) {
  * -----------------------------------------------------*/
 
 // Display debug code
-$xdbconfig['debug'] = (isset($debug)) ? $debug : 0;
+$xdb->xdbconfig['debug'] = (isset($debug)) ? $debug : 0;
 // MODX tablename (defaults to site_content)
-$xdbconfig['tablename'] = (isset($tablename)) ? $tablename : 'site_content';
+$xdb->xdbconfig['tablename'] = (isset($tablename)) ? $tablename : 'site_content';
 // Chunkname for the filter boxes outer template (@FILE: or @CODE: binding possible)
-$xdbconfig['filterOuterTpl'] = (isset($filterOuterTpl)) ? $filterOuterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterOuterTpl.html';
+$xdb->xdbconfig['filterOuterTpl'] = (isset($filterOuterTpl)) ? $filterOuterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterOuterTpl.html';
 // Chunkname for a filter box template (@FILE: or @CODE: binding possible)
-$xdbconfig['filterTpl'] = (isset($filterTpl)) ? $filterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterTpl.html';
+$xdb->xdbconfig['filterTpl'] = (isset($filterTpl)) ? $filterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterTpl.html';
 // Chunkname for a filter box single item template (@FILE: or @CODE: binding possible)
-$xdbconfig['filterItemTpl'] = (isset($filterItemTpl)) ? $filterItemTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterItemTpl.html';
+$xdb->xdbconfig['filterItemTpl'] = (isset($filterItemTpl)) ? $filterItemTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterItemTpl.html';
 // An unique id if there is more than one xdbfilter call on a page
-$xdbconfig['id'] = isset($id) ? $id : '';
+$xdb->xdbconfig['id'] = isset($id) ? $id : '';
 // Shows a checkbox with this string - if checked the filter displays all items in this section that have no value set in this section
-$xdbconfig['showempty'] = isset($showempty) ? $showempty : '0';
+$xdb->xdbconfig['showempty'] = isset($showempty) ? $showempty : '0';
 // Fot this comma separated fields the filter boxes are generated
-$xdbconfig['filterFields'] = isset($filterFields) ? explode(',', $filterFields) : array();
+$xdb->xdbconfig['filterFields'] = isset($filterFields) ? explode(',', $filterFields) : array();
 // A Filter that is preselected (can be modified by $_GET and $_REQUEST)
-$xdbconfig['filters'] = isset($filters) ? $filters : '';
+$xdb->xdbconfig['filters'] = isset($filters) ? $filters : '';
 // Same as $filters, but it can't be modified by $_GET and $_REQUEST
-$xdbconfig['preselect'] = isset($preselect) ? $preselect : '';
+$xdb->xdbconfig['preselect'] = isset($preselect) ? $preselect : '';
 // The offset for the SQL string filtering the database table
-$xdbconfig['offset'] = (isset($offset)) ? $offset : 0;
+$xdb->xdbconfig['offset'] = (isset($offset)) ? $offset : 0;
 // The limit for the SQL string filtering the database table
-$xdbconfig['limit'] = (isset($limit)) ? $limit : 9999999;
+$xdb->xdbconfig['limit'] = (isset($limit)) ? $limit : 9999999;
 // The orderby for the SQL string filtering the database table
-$xdbconfig['orderby'] = (isset($orderby)) ? $orderby : '';
+$xdb->xdbconfig['orderby'] = (isset($orderby)) ? $orderby : '';
 // The the filter boxes will be filtered too, so the result can be refined easier
-$xdbconfig['refine'] = (isset($refine)) ? $refine : 0;
+$xdb->xdbconfig['refine'] = (isset($refine)) ? $refine : 0;
 // A comma separated list of fields. The content of this (filtered) fields is listed comma separated in a placeholder [+xdbf_FIELDNAME+] (defaults to 'id', particular [+xdbf_id+]).
 // If the separator should not be a comma it can be defined by adding :SEPARATOR after the fieldname i.e. `id:|`
-$xdbconfig['outputFields'] = isset($outputFields) ? explode(',', $outputFields) : array('id');
+$xdb->xdbconfig['outputFields'] = isset($outputFields) ? explode(',', $outputFields) : array('id');
 // Write an own sql select for the filter query
-$xdbconfig['where'] = isset($where) ? $where : '';
+$xdb->xdbconfig['where'] = isset($where) ? $where : '';
 // Write an own sql where clause for the filter query
-$xdbconfig['sql'] = isset($sql) ? $sql : '';
+$xdb->xdbconfig['sql'] = isset($sql) ? $sql : '';
 // Include TVs for MODX documents
-$xdbconfig['includeTvs'] = (isset($includeTvs)) ? $includeTvs : 0;
+$xdb->xdbconfig['includeTvs'] = (isset($includeTvs)) ? $includeTvs : 0;
 // Show the filter boxes
-$xdbconfig['display'] = isset($display) ? $display : 'filterbox';
-// comma separated list of TVs that are defined as multiselect variables (the field contains a || separated list of possible values)
-$xdbconfig['multiselectTvs'] = (isset($multiselectTvs)) ? $multiselectTvs : '';
+$xdb->xdbconfig['display'] = isset($display) ? $display : 'filterbox';
 
-$xdbconfig['id_'] = isset($id) ? $id.'_' : '';
-$xdbconfig['preselect_arr'] = (trim($xdbconfig['preselect']) !== '') ? explode('||', $xdbconfig['preselect']) : array();
-$xdbconfig['multiselectTvs_arr'] = (trim($xdbconfig['multiselectTvs']) !== '') ? explode(',', $xdbconfig['multiselectTvs']) : array();
-;
-$xdbconfig['where'] = str_replace('eq', '=', $xdbconfig['where']);
-$xdbconfig['sql'] = str_replace('eq', '=', $xdbconfig['sql']);
+$xdb->xdbconfig['id_'] = isset($id) ? $id.'_' : '';
+$xdb->xdbconfig['preselect_arr'] = (trim($xdb->xdbconfig['preselect']) !== '') ? explode('||', $xdb->xdbconfig['preselect']) : array();
+
+$xdb->xdbconfig['where'] = str_replace('eq', '=', $xdb->xdbconfig['where']);
+$xdb->xdbconfig['sql'] = str_replace('eq', '=', $xdb->xdbconfig['sql']);
 
 // get or request filters
-$xdbconfig['filters'] = isset($_GET[$xdbconfig['id_'].'filters']) ? $_GET[$xdbconfig['id_'].'filters'] : $xdbconfig['filters'];
-$xdbconfig['filters'] = isset($_REQUEST[$xdbconfig['id_'].'filters']) ? $_REQUEST[$xdbconfig['id_'].'filters'] : $xdbconfig['filters'];
-$xdbconfig['filters_arr'] = (trim($xdbconfig['filters']) !== '') ? explode('||', $xdbconfig['filters']) : array();
+$xdb->xdbconfig['filters'] = isset($_GET[$xdb->xdbconfig['id_'].'filters']) ? $_GET[$xdb->xdbconfig['id_'].'filters'] : $xdb->xdbconfig['filters'];
+$xdb->xdbconfig['filters'] = isset($_REQUEST[$xdb->xdbconfig['id_'].'filters']) ? $_REQUEST[$xdb->xdbconfig['id_'].'filters'] : $xdb->xdbconfig['filters'];
+$xdb->xdbconfig['filters_arr'] = (trim($xdb->xdbconfig['filters']) !== '') ? explode('||', $xdb->xdbconfig['filters']) : array();
 
 // get or request refine
-$xdbconfig['refine'] = isset($_GET['refine']) ? $_GET['refine'] : $xdbconfig['refine'];
-$xdbconfig['refine'] = isset($_REQUEST['refine']) ? $_REQUEST['refine'] : $xdbconfig['refine'];
+$xdb->xdbconfig['refine'] = isset($_GET['refine']) ? $_GET['refine'] : $xdb->xdbconfig['refine'];
+$xdb->xdbconfig['refine'] = isset($_REQUEST['refine']) ? $_REQUEST['refine'] : $xdb->xdbconfig['refine'];
 
 // read filter-checkboxes and make filterstring
-$link = isset($xdbconfig['showempty']) ? '&showempty='.$xdbconfig['showempty'] : '';
+$link = isset($xdb->xdbconfig['showempty']) ? '&showempty='.$xdb->xdbconfig['showempty'] : '';
 
-if (isset($_REQUEST[$xdbconfig['id_'].'xdbfiltersubmit'])) {
+if (isset($_REQUEST[$xdb->xdbconfig['id_'].'xdbfiltersubmit'])) {
     $filter = '';
     $filtercounter = 0;
-    foreach ($xdbconfig['filterFields'] as $filterField) {
+    foreach ($xdb->xdbconfig['filterFields'] as $filterField) {
         $count = count($_REQUEST[$filterField]);
         if ($count > 0) {
             if ($filtercounter > 0)
@@ -119,15 +116,15 @@ if (isset($_REQUEST[$xdbconfig['id_'].'xdbfiltersubmit'])) {
         }
     }
     $filter .= $filter !== '' ? ')' : '';
-    $xdbconfig['filters'] = $filter;
-    $xdbconfig['filters_arr'] = (trim($xdbconfig['filters']) !== '') ? explode('||', $xdbconfig['filters']) : array();
+    $xdb->xdbconfig['filters'] = $filter;
+    $xdb->xdbconfig['filters_arr'] = (trim($xdb->xdbconfig['filters']) !== '') ? explode('||', $xdb->xdbconfig['filters']) : array();
     $link .= '&filters='.$filter;
-} elseif (isset($_REQUEST[$xdbconfig['id_'].'xdbfilterclear'])) {
-    $xdbconfig['clear'] = 1;
+} elseif (isset($_REQUEST[$xdb->xdbconfig['id_'].'xdbfilterclear'])) {
+    $xdb->xdbconfig['clear'] = 1;
 } else {
-    $link .= '&filters='.$xdbconfig['filters'];
+    $link .= '&filters='.$xdb->xdbconfig['filters'];
 }
-$modx->setPlaceholder($xdbconfig['id_'].'filterlink', $link);
+$modx->setPlaceholder($xdb->xdbconfig['id_'].'filterlink', $link);
 
 /* -------------------------
  * Snippet logic starts here
@@ -145,7 +142,7 @@ if (!class_exists('xdbfilter')) {
 
 // Initialize class
 if (class_exists('xdbfilter')) {
-    $xdb = new xdbfilter($xdbconfig, $strings);
+    $xdb = new xdbfilter($xdb->xdbconfig, $strings);
 } else {
     $output = 'xdbfilter class not found';
     return;
@@ -163,9 +160,9 @@ if (!class_exists('xdbfChunkie')) {
 
 // Initialize variables
 $xdb->rows_tbl = $modx->db->config['dbase'].'.'.$modx->db->config['table_prefix'].$xdb->xdbconfig['tablename'];
-$xdb->filterFields = $xdbconfig['filterFields'];
-$xdb->outputfield = $xdbconfig['outputfield'];
-$xdb->sql = $xdbconfig['sql'];
+$xdb->filterFields = $xdb->xdbconfig['filterFields'];
+$xdb->outputfield = $xdb->xdbconfig['outputfield'];
+$xdb->sql = $xdb->xdbconfig['sql'];
 
 $outerTplData = array();
 $pictureTplData = array();
@@ -197,17 +194,18 @@ if ($xdb->sql != '') {
                 }
             }
         }
-        $tvnames = $tvElements = array();
+        $tvNames = $tvElements = $tvCaption = array();
 
+        array_push($docfields, 'id');
         foreach ($xdb->filterFields as $field) {
             if (strpos($field, "tv") === 0)
-                $tvnames[] = substr($field, 2);
+                $tvNames[] = substr($field, 2);
             else
                 array_push($docfields, $field);
         }
-
+        
         // remove double entries
-        $vars = array('docfields', 'tvnames');
+        $vars = array('docfields', 'tvNames');
         foreach ($vars as $var) {
             ${$var} = array_unique(${$var});
             sort(${$var});
@@ -215,21 +213,33 @@ if ($xdb->sql != '') {
         }
 
         // get a list of all documents and their tv values from the database
-        $allrows = $xdb->getAllVars($docfields, $tvnames, "name,elements", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
+        $rows = $xdb->getAllVars($docfields, $tvNames, "name,caption,elements", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
 
-        if (is_array($allrows) && count($allrows)) {
-            // get tv values
-            foreach ($allrows as $pos => $var) {
-                if (isset($var['tvValue'])) {
-                    $value = $var['tvValue'];
+        if (is_array($rows) && count($rows)) {
+            // get field values
+            $tvNames = array();
+            foreach ($rows as $row) {
+                if (!isset($allrows[$row['id']])) {
+                    $allrows[$row['id']] = array();
+                    foreach ($docfields as $field) {
+                        $allrows[$row['id']][$field] = $row[$field];
+                    }
+                }
+                if (isset($row['tvValue'])) {
+                    $value = $row['tvValue'];
                     if (stripos($val = trim($value), '@eval') === 0) {
                         $value = eval(ltrim(substr($val, 5), " :"));
                     }
                     $value = str_replace(array('{{', '}}'), '', $value);
-                    $tvName = 'tv'.$var['tvName'];
-                    if (isset($var['tvElements']) && !isset($tvElements[$tvName]))
-                        $tvElements[$tvName] = $var['tvElements'];
-                    $allrows[$pos][$tvName] = $value;
+                    $tvName = 'tv'.$row['tvName'];
+                    if (isset($row['tvCaption']) && !isset($tvCaption[$tvName]))
+                        $tvCaption[$tvName] = $row['tvCaption'];
+                    if (isset($row['tvElements']) && !isset($tvElements[$tvName]))
+                        $tvElements[$tvName] = $row['tvElements'];
+                    if ((strpos($value, "||") !== false) && !isset($xdb->multiselectTvs[$tvName]))
+                        $xdb->multiselectTvs[$tvName] = 1;
+
+                    $allrows[$row['id']][$tvName] = $value;
                 }
             }
         } else
@@ -247,27 +257,31 @@ if (isset($rs)) {
 }
 
 if ($xdb->xdbconfig['debug']) {
+    echo '<pre>'.print_r($xdb, true).'</pre>';
     $modx->logEvent(3, 1, "<pre>".htmlentities(var_export($allrows,true))."</pre>" , 'xdbfilter');
+    echo '<pre>allrows: '.count($allrows).'</pre>';
 }
 
 if (isset($xdb->xdbconfig['clear'])) {
     $preselectRows = $rows = $allrows;
 } else {
     // first filter all rows which are in preselect parameter
-    $preselectRows = $xdb->filterrows($allrows, $xdbconfig['preselect_arr'], $xdbconfig['multiselectTvs_arr']);
+    $preselectRows = $xdb->filterrows($allrows, $xdb->xdbconfig['preselect_arr']);
 
     // make outputFields placeholder
-    $rows = $xdb->filterrows($preselectRows, $xdbconfig['filters_arr'], $xdbconfig['multiselectTvs_arr']);
+    $rows = $xdb->filterrows($preselectRows, $xdb->xdbconfig['filters_arr']);
 }
 
 if ($xdb->xdbconfig['debug']) {
-    foreach ($rows[0] as $key => $rowfield) {
+/*    foreach ($rows[0] as $key => $rowfield) {
         echo $key.'<br/>';
-    }
+    }*/
+    $modx->logEvent(3, 1, "<pre>".htmlentities(var_export($rows,true))."</pre>" , 'xdbfilter_filtered');
+    echo '<pre>Rows: '.count($rows).'</pre>';
 }
 
 
-foreach ($xdbconfig['outputFields'] as $field) {
+foreach ($xdb->xdbconfig['outputFields'] as $field) {
     $listid = array();
     $fieldarr = explode(':', $field);
     $field = $fieldarr[0];
@@ -277,17 +291,17 @@ foreach ($xdbconfig['outputFields'] as $field) {
     }
     $listid = implode($delimiter, array_unique($listid));
     $listid = preg_replace('/'.$delimiter.'$/', '', $listid);
-    $modx->setPlaceholder($xdbconfig['id_'].'xdbf_'.$field, $listid);
+    $modx->setPlaceholder($xdb->xdbconfig['id_'].'xdbf_'.$field, $listid);
 
     if ($xdb->xdbconfig['debug']) {
-        echo $xdbconfig['id_'].'xdbf_'.$field.' - '.$listid.'<br/>';
+        echo $xdb->xdbconfig['id_'].'xdbf_'.$field.' - '.$listid.'<br/>';
     }
 }
 
 // make filterform
-if ($xdbconfig['display']) {
+if ($xdb->xdbconfig['display']) {
 
-    if ($xdbconfig['refine'])
+    if ($xdb->xdbconfig['refine'])
         $filterRows = $rows;
     else
         $filterRows = $preselectRows;
@@ -298,29 +312,29 @@ if ($xdbconfig['display']) {
 
         foreach ($filterRows as $row) {
             $filterRowVal = $row[$filterField];
-            if (in_array($filterField, $xdbconfig['multiselectTvs_arr']) && !empty($filterRowVal)) {
+            if (($xdb->multiselectTvs[$filterField] === 1) && !empty($filterRowVal)) {
                 array_push($multiselectTvValues, $filterRowVal);
             }
             if (!in_array($filterRowVal, $filterFieldValues) && !empty($filterRowVal)) {
                 array_push($filterFieldValues, $filterRowVal);
             }
         }
-        if (in_array($filterField, $xdbconfig['multiselectTvs_arr'])) {
+        if ($xdb->multiselectTvs[$filterField] === 1) {
             $multiselectTvValues = implode('||', $multiselectTvValues);
             $multiselectTvValues = explode('||', $multiselectTvValues);
             $multiselectTvValues = array_unique($multiselectTvValues, SORT_REGULAR);
             $filterFieldValues = $multiselectTvValues;
         }
-        if ($xdbconfig['showempty'] !== '0') {
-            array_push($filterFieldValues, $xdbconfig['showempty']);
+        if ($xdb->xdbconfig['showempty'] !== '0') {
+            array_push($filterFieldValues, $xdb->xdbconfig['showempty']);
         }
 
         $counter = 0;
         if (count($filterFieldValues) > 0) {
             
             $filters = array();
-            if ($xdbconfig['filters_arr'] > 0) {
-                foreach ($xdbconfig['filters_arr'] as $filter) {
+            if ($xdb->xdbconfig['filters_arr'] > 0) {
+                foreach ($xdb->xdbconfig['filters_arr'] as $filter) {
                     $filter = explode('(', $filter);
                     $filterBy = $filter[0];
                     $filterValues = str_replace(')', '', $filter[1]);
@@ -375,6 +389,7 @@ if ($xdbconfig['display']) {
                 $counter++;
             }
             $filterTplData['filterfield'] = $filterField;
+            $filterTplData['filterfieldcaption'] = isset($tvCaption[$filterField]) ? $tvCaption[$filterField] : $filterField;
             $tpl = new xdbfChunkie($xdb->xdbconfig['filterTpl']);
             $tpl->addVar('xdbfilter', $filterTplData);
             $outerTplData['filterfields'] .= $tpl->Render();
