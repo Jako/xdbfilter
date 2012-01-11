@@ -228,8 +228,7 @@ if ($xdb->sql != '') {
                     }
                 }
                 if (isset($row['tvValue'])) {
-                    $value = $row['tvValue'];
-                    $value = ProcessTVCommand($value, $row['tvName'], $row['id']);
+                    $value = ProcessTVCommand($row['tvValue'], $row['tvName'], $row['id']);
                     $value = str_replace(array('{{', '}}'), '', $value);
                     $tvName = 'tv'.$row['tvName'];
                     if (isset($row['tvCaption']) && !isset($tvCaption[$tvName]))
@@ -344,10 +343,7 @@ if ($xdb->xdbconfig['display']) {
             if (strpos($filterField, "tv") === 0) {
                 // get tv list elements
                 if (isset($tvElements[$filterField])) {
-                    $elements = $tvElements[$filterField];
-                    if (stripos($val = trim($elements), '@eval') === 0) {
-                        $elements = eval(ltrim(substr($val, 5), " :"));
-                    }
+                    $elements = ProcessTVCommand($tvElements[$filterField]);
                     $elements = explode("||", $elements);
                     for ($i = 0, $count = count($elements); $i < $count; ++$i) {
                         list($optionName, $optionValue) = explode("==", $elements[$i]);
