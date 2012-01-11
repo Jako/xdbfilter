@@ -41,67 +41,67 @@ if (file_exists($configFile)) {
  * -----------------------------------------------------*/
 
 // Display debug code
-$xdb->xdbconfig['debug'] = (isset($debug)) ? $debug : 0;
+$xdbconfig['debug'] = (isset($debug)) ? $debug : 0;
 // MODX tablename (defaults to site_content)
-$xdb->xdbconfig['tablename'] = (isset($tablename)) ? $tablename : 'site_content';
+$xdbconfig['tablename'] = (isset($tablename)) ? $tablename : 'site_content';
 // Chunkname for the filter boxes outer template (@FILE: or @CODE: binding possible)
-$xdb->xdbconfig['filterOuterTpl'] = (isset($filterOuterTpl)) ? $filterOuterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterOuterTpl.html';
+$xdbconfig['filterOuterTpl'] = (isset($filterOuterTpl)) ? $filterOuterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterOuterTpl.html';
 // Chunkname for a filter box template (@FILE: or @CODE: binding possible)
-$xdb->xdbconfig['filterTpl'] = (isset($filterTpl)) ? $filterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterTpl.html';
+$xdbconfig['filterTpl'] = (isset($filterTpl)) ? $filterTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterTpl.html';
 // Chunkname for a filter box single item template (@FILE: or @CODE: binding possible)
-$xdb->xdbconfig['filterItemTpl'] = (isset($filterItemTpl)) ? $filterItemTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterItemTpl.html';
+$xdbconfig['filterItemTpl'] = (isset($filterItemTpl)) ? $filterItemTpl : '@FILE:'.XDBFILTER_PATH.'templates/filterItemTpl.html';
 // An unique id if there is more than one xdbfilter call on a page
-$xdb->xdbconfig['id'] = isset($id) ? $id : '';
+$xdbconfig['id'] = isset($id) ? $id : '';
 // Shows a checkbox with this string - if checked the filter displays all items in this section that have no value set in this section
-$xdb->xdbconfig['showempty'] = isset($showempty) ? $showempty : '0';
+$xdbconfig['showempty'] = isset($showempty) ? $showempty : '0';
 // Fot this comma separated fields the filter boxes are generated
-$xdb->xdbconfig['filterFields'] = isset($filterFields) ? explode(',', $filterFields) : array();
+$xdbconfig['filterFields'] = isset($filterFields) ? explode(',', $filterFields) : array();
 // A Filter that is preselected (can be modified by $_GET and $_REQUEST)
-$xdb->xdbconfig['filters'] = isset($filters) ? $filters : '';
+$xdbconfig['filters'] = isset($filters) ? $filters : '';
 // Same as $filters, but it can't be modified by $_GET and $_REQUEST
-$xdb->xdbconfig['preselect'] = isset($preselect) ? $preselect : '';
+$xdbconfig['preselect'] = isset($preselect) ? $preselect : '';
 // The offset for the SQL string filtering the database table
-$xdb->xdbconfig['offset'] = (isset($offset)) ? $offset : 0;
+$xdbconfig['offset'] = (isset($offset)) ? $offset : 0;
 // The limit for the SQL string filtering the database table
-$xdb->xdbconfig['limit'] = (isset($limit)) ? $limit : 9999999;
+$xdbconfig['limit'] = (isset($limit)) ? $limit : 9999999;
 // The orderby for the SQL string filtering the database table
-$xdb->xdbconfig['orderby'] = (isset($orderby)) ? $orderby : '';
+$xdbconfig['orderby'] = (isset($orderby)) ? $orderby : '';
 // The the filter boxes will be filtered too, so the result can be refined easier
-$xdb->xdbconfig['refine'] = (isset($refine)) ? $refine : 0;
+$xdbconfig['refine'] = (isset($refine)) ? $refine : 0;
 // A comma separated list of fields. The content of this (filtered) fields is listed comma separated in a placeholder [+xdbf_FIELDNAME+] (defaults to 'id', particular [+xdbf_id+]).
 // If the separator should not be a comma it can be defined by adding :SEPARATOR after the fieldname i.e. `id:|`
-$xdb->xdbconfig['outputFields'] = isset($outputFields) ? explode(',', $outputFields) : array('id');
+$xdbconfig['outputFields'] = isset($outputFields) ? explode(',', $outputFields) : array('id');
 // Write an own sql select for the filter query
-$xdb->xdbconfig['where'] = isset($where) ? $where : '';
+$xdbconfig['where'] = isset($where) ? $where : '';
 // Write an own sql where clause for the filter query
-$xdb->xdbconfig['sql'] = isset($sql) ? $sql : '';
+$xdbconfig['sql'] = isset($sql) ? $sql : '';
 // Include TVs for MODX documents
-$xdb->xdbconfig['includeTvs'] = (isset($includeTvs)) ? $includeTvs : 0;
+$xdbconfig['includeTvs'] = (isset($includeTvs)) ? $includeTvs : 0;
 // Show the filter boxes
-$xdb->xdbconfig['display'] = isset($display) ? $display : 'filterbox';
+$xdbconfig['display'] = isset($display) ? $display : 'filterbox';
 
-$xdb->xdbconfig['id_'] = isset($id) ? $id.'_' : '';
-$xdb->xdbconfig['preselect_arr'] = (trim($xdb->xdbconfig['preselect']) !== '') ? explode('||', $xdb->xdbconfig['preselect']) : array();
+$xdbconfig['id_'] = isset($id) ? $id.'_' : '';
+$xdbconfig['preselect_arr'] = (trim($xdbconfig['preselect']) !== '') ? explode('||', $xdbconfig['preselect']) : array();
 
-$xdb->xdbconfig['where'] = str_replace('eq', '=', $xdb->xdbconfig['where']);
-$xdb->xdbconfig['sql'] = str_replace('eq', '=', $xdb->xdbconfig['sql']);
+$xdbconfig['where'] = str_replace('eq', '=', $xdbconfig['where']);
+$xdbconfig['sql'] = str_replace('eq', '=', $xdbconfig['sql']);
 
 // get or request filters
-$xdb->xdbconfig['filters'] = isset($_GET[$xdb->xdbconfig['id_'].'filters']) ? $_GET[$xdb->xdbconfig['id_'].'filters'] : $xdb->xdbconfig['filters'];
-$xdb->xdbconfig['filters'] = isset($_REQUEST[$xdb->xdbconfig['id_'].'filters']) ? $_REQUEST[$xdb->xdbconfig['id_'].'filters'] : $xdb->xdbconfig['filters'];
-$xdb->xdbconfig['filters_arr'] = (trim($xdb->xdbconfig['filters']) !== '') ? explode('||', $xdb->xdbconfig['filters']) : array();
+$xdbconfig['filters'] = isset($_GET[$xdbconfig['id_'].'filters']) ? $_GET[$xdbconfig['id_'].'filters'] : $xdbconfig['filters'];
+$xdbconfig['filters'] = isset($_REQUEST[$xdbconfig['id_'].'filters']) ? $_REQUEST[$xdbconfig['id_'].'filters'] : $xdbconfig['filters'];
+$xdbconfig['filters_arr'] = (trim($xdbconfig['filters']) !== '') ? explode('||', $xdbconfig['filters']) : array();
 
 // get or request refine
-$xdb->xdbconfig['refine'] = isset($_GET['refine']) ? $_GET['refine'] : $xdb->xdbconfig['refine'];
-$xdb->xdbconfig['refine'] = isset($_REQUEST['refine']) ? $_REQUEST['refine'] : $xdb->xdbconfig['refine'];
+$xdbconfig['refine'] = isset($_GET['refine']) ? $_GET['refine'] : $xdbconfig['refine'];
+$xdbconfig['refine'] = isset($_REQUEST['refine']) ? $_REQUEST['refine'] : $xdbconfig['refine'];
 
 // read filter-checkboxes and make filterstring
-$link = isset($xdb->xdbconfig['showempty']) ? '&showempty='.$xdb->xdbconfig['showempty'] : '';
+$link = isset($xdbconfig['showempty']) ? '&showempty='.$xdbconfig['showempty'] : '';
 
-if (isset($_REQUEST[$xdb->xdbconfig['id_'].'xdbfiltersubmit'])) {
+if (isset($_REQUEST[$xdbconfig['id_'].'xdbfiltersubmit'])) {
     $filter = '';
     $filtercounter = 0;
-    foreach ($xdb->xdbconfig['filterFields'] as $filterField) {
+    foreach ($xdbconfig['filterFields'] as $filterField) {
         $count = count($_REQUEST[$filterField]);
         if ($count > 0) {
             if ($filtercounter > 0)
@@ -116,15 +116,15 @@ if (isset($_REQUEST[$xdb->xdbconfig['id_'].'xdbfiltersubmit'])) {
         }
     }
     $filter .= $filter !== '' ? ')' : '';
-    $xdb->xdbconfig['filters'] = $filter;
-    $xdb->xdbconfig['filters_arr'] = (trim($xdb->xdbconfig['filters']) !== '') ? explode('||', $xdb->xdbconfig['filters']) : array();
+    $xdbconfig['filters'] = $filter;
+    $xdbconfig['filters_arr'] = (trim($xdbconfig['filters']) !== '') ? explode('||', $xdbconfig['filters']) : array();
     $link .= '&filters='.$filter;
-} elseif (isset($_REQUEST[$xdb->xdbconfig['id_'].'xdbfilterclear'])) {
-    $xdb->xdbconfig['clear'] = 1;
+} elseif (isset($_REQUEST[$xdbconfig['id_'].'xdbfilterclear'])) {
+    $xdbconfig['clear'] = 1;
 } else {
-    $link .= '&filters='.$xdb->xdbconfig['filters'];
+    $link .= '&filters='.$xdbconfig['filters'];
 }
-$modx->setPlaceholder($xdb->xdbconfig['id_'].'filterlink', $link);
+$modx->setPlaceholder($xdbconfig['id_'].'filterlink', $link);
 
 /* -------------------------
  * Snippet logic starts here
@@ -142,7 +142,7 @@ if (!class_exists('xdbfilter')) {
 
 // Initialize class
 if (class_exists('xdbfilter')) {
-    $xdb = new xdbfilter($xdb->xdbconfig, $strings);
+    $xdb = new xdbfilter($xdbconfig, $strings);
 } else {
     $output = 'xdbfilter class not found';
     return;
