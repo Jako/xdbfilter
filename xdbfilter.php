@@ -262,20 +262,18 @@ if ($xdb->xdbconfig['debug']) {
     echo '<pre>allrows: '.count($allrows).'</pre>';
 }
 
-if (isset($xdb->xdbconfig['clear'])) {
-    $preselectRows = $rows = $allrows;
-} else {
-    // first filter all rows which are in preselect parameter
-    $preselectRows = $xdb->filterrows($allrows, $xdb->xdbconfig['preselect_arr']);
 
+// first filter all rows which are in preselect parameter
+$preselectRows = $xdb->filterrows($allrows, $xdb->xdbconfig['preselect_arr']);
+
+if (isset($xdb->xdbconfig['clear'])) {
+    $rows = $preselectRows;
+} else {  
     // make outputFields placeholder
     $rows = $xdb->filterrows($preselectRows, $xdb->xdbconfig['filters_arr']);
 }
 
 if ($xdb->xdbconfig['debug']) {
-/*    foreach ($rows[0] as $key => $rowfield) {
-        echo $key.'<br/>';
-    }*/
     $modx->logEvent(3, 1, "<pre>".htmlentities(var_export($rows,true))."</pre>" , 'xdbfilter_filtered');
     echo '<pre>Rows: '.count($rows).'</pre>';
 }
@@ -374,7 +372,7 @@ if ($xdb->xdbconfig['display']) {
                 $value = isset($field['value']) ? $field['value'] : $field;
                 $filterValues = strtolower($filters[$filterField]);
                 $values = explode('|', $filterValues);
-                if (!isset($xdb->xdbconfig['clear']) && in_array(strtolower($value), $values)) {
+                if (in_array(strtolower($value), $values)) {
                     $filterItemTplData['filteritemchecked'] = '1';
                 } else {
                     $filterItemTplData['filteritemchecked'] = '0';
