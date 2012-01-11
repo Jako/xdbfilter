@@ -7,7 +7,7 @@
  * @subpackage class_file
  * includes the functions used in xdbfilter snippet
  *
- * @version 0.4 <09.01.2012>
+ * @version 0.5 <11.01.2012>
  * @author Bruno Perner <b.perner@gmx.de>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
@@ -32,16 +32,17 @@ class xdbfilter {
         // Set template variables to empty var
         $this->xdbconfig = $xdbconfig;
         $this->strings = $strings;
+        $this->multiselectTvs = array();
     }
 
     // ---------------------------
     // function to filter the rows
     // ---------------------------
 
-    function filterrows($rows, $filters_arr, $multiselectTvs_arr = array()) {
+    function filterrows($rows, $filters_arr) {
 
-        $filters = array();
-        $filterBys = array();
+        $filters = $filterBys = $outputrows = array();
+
         if ($filters_arr > 0) {
             foreach ($filters_arr as $filter) {
                 $filter = explode('(', $filter);
@@ -49,32 +50,30 @@ class xdbfilter {
                 array_push($filterBys, $filterBy);
                 $filterValues = str_replace(')', '', $filter[1]);
                 $filters[$filterBy] = $filterValues;
+                
             }
         }
+        $count_filterBys = count($filterBys);
 
-        $outputrows = array();
-        foreach ($rows as $row) {
-            if (count($filterBys) == 0) {
+        foreach ($rows as $row_num => $row) {
+            if ($count_filterBys === 0) {
                 $pusharray = 1;
             } else {
                 foreach ($filterBys as $filterBy) {
                     $filterRowVal = $row[$filterBy];
                     $pusharray = 0;
-                    $filterValues = $filters[$filterBy];
-                    if ($filterValues == '')
-                        unset($filterValues);
 
-                    if (isset($filterValues)) {
+                    if (($filterValues = $filters[$filterBy]) != '') {
                         $values = explode("|", $filterValues);
                         foreach ($values as $filterValue) {
 
-                            if ($xdbconfig['showempty'] == $filterValue && (trim($filterRowVal) == '' || empty($filterRowVal))) {
+                            if (($this->xdbconfig['showempty'] == $filterValue) && (trim($filterRowVal) == '' || empty($filterRowVal))) {
                                 $pusharray = 1;
-                            } elseif (trim($filterRowVal) !== '' && !empty($filterRowVal)) {
+                            } elseif ((trim($filterRowVal) !== '') && !empty($filterRowVal)) {
                                 // If filterTv is a multiselectTv
-                                if (in_array($filterBy, $multiselectTvs_arr)) {
+                                if ($this->multiselectTvs[$filterBy] === 1) {
                                     // If filterTv value matches one part of the multiseletTv value
-                                    if (in_array($filterValue, explode('||', $filterRowVal))) {
+                                    if (in_array(strtolower($filterValue), explode('||', strtolower($filterRowVal)))) {
                                         $pusharray = 1;
                                     }
                                 } else {
@@ -88,14 +87,16 @@ class xdbfilter {
                     } elseif (!empty($filterRowVal) || trim($filterRowVal) !== '') {
                         $pusharray = 0;
                     }
-                    if ($pusharray == 0)
+                    if ($pusharray == 0) {
                         break;
+                    }
                 }
             }
             if ($pusharray == 1) {
                 array_push($outputrows, $row);
             }
         }
+
         return $outputrows;
     }
 

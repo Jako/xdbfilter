@@ -54,9 +54,11 @@ id              Eine eindeutige id, falls das Snippet mehrmals auf einer Seite
                 Stichwort Verschachtelung von Platzhaltern und Filteraufruf 
                 oder innerhalb eines Ditto-Templates! (Standard: leer)
 display         Filterboxen anzeigen (Default: 1)
-ultiselectTvs   eine kommaseparierte Liste von Datenbankfeldern, deren 
-                Feldinhalte mehrere Werte gleichzeitig annehmen können 
-                (z.B. Multi-Select Listboxen) 
+
+xdbfilterclear bzw. id_xdbfilterclear (siehe Parameter "id")
+                Kann per url-Parameter übergeben werden, um die Vorbelegung der
+                Optionen zu löschen, die mit den Parametern "filter" und
+                "preselect" bzw. von $_GET oder $_REQUEST übergeben wurde
 
 WICHTIG: Ein Snippet-Parameter kann NICHT das '=' Zeichen enthalten. Stattdessen 
 muss 'eq' benutzt werden (Gilt für die Parameter &sql und &where).
