@@ -178,7 +178,7 @@ if ($xdb->sql != '') {
     $rs = $modx->db->query($query);
 } else {
     if ($xdb->xdbconfig['includeTvs'] && $xdb->xdbconfig['tablename'] == 'site_content') {
-
+        
         // set query filter
         $where = $xdb->xdbconfig['where'].($xdb->xdbconfig['showempty'] === "0" ? (strlen($xdb->xdbconfig['where']) ? " AND " : "")."tvc.value IS NOT NULL AND tvc.value <> '[]'" : "");
 
@@ -216,6 +216,8 @@ if ($xdb->sql != '') {
         $rows = $xdb->getAllVars($docfields, $tvNames, "name,caption,elements", $where, $xdb->xdbconfig['orderby'], $xdb->xdbconfig['limit'], $xdb->xdbconfig['offset']);
 
         if (is_array($rows) && count($rows)) {
+            // include tv command processor
+            include_once(MODX_MANAGER_PATH.'includes/tmplvars.commands.inc.php');
             // get field values
             $tvNames = array();
             foreach ($rows as $row) {
@@ -226,10 +228,7 @@ if ($xdb->sql != '') {
                     }
                 }
                 if (isset($row['tvValue'])) {
-                    $value = $row['tvValue'];
-                    if (stripos($val = trim($value), '@eval') === 0) {
-                        $value = eval(ltrim(substr($val, 5), " :"));
-                    }
+                    $value = ProcessTVCommand($row['tvValue'], $row['tvName'], $row['id']);
                     $value = str_replace(array('{{', '}}'), '', $value);
                     $tvName = 'tv'.$row['tvName'];
                     if (isset($row['tvCaption']) && !isset($tvCaption[$tvName]))
@@ -344,10 +343,7 @@ if ($xdb->xdbconfig['display']) {
             if (strpos($filterField, "tv") === 0) {
                 // get tv list elements
                 if (isset($tvElements[$filterField])) {
-                    $elements = $tvElements[$filterField];
-                    if (stripos($val = trim($elements), '@eval') === 0) {
-                        $elements = eval(ltrim(substr($val, 5), " :"));
-                    }
+                    $elements = ProcessTVCommand($tvElements[$filterField]);
                     $elements = explode("||", $elements);
                     for ($i = 0, $count = count($elements); $i < $count; ++$i) {
                         list($optionName, $optionValue) = explode("==", $elements[$i]);
