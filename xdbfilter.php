@@ -148,7 +148,7 @@ if (class_exists('xdbfilter')) {
     return;
 }
 
-if (!class_exists('xdbfChunkie')) {
+if (!class_exists('evoChunkie')) {
     $chunkieclass = MODX_BASE_PATH.XDBFILTER_PATH.'chunkie/chunkie.class.inc.php';
     if (file_exists($chunkieclass)) {
         include_once $chunkieclass;
@@ -377,21 +377,21 @@ if ($xdb->xdbconfig['display']) {
                 $filterItemTplData['filteritemname'] = $filterField.'[]';
                 $filterItemTplData['filteritemvalue'] = $value;
                 $filterItemTplData['filteritemcaption'] = isset($field['name']) ? $field['name'] : $field;
-                $tpl = new xdbfChunkie($xdb->xdbconfig['filterItemTpl']);
+                $tpl = new evoChunkie($xdb->xdbconfig['filterItemTpl']);
                 $tpl->addVar('xdbfilter', $filterItemTplData);
                 $filterTplData['filteritems'] .= $tpl->Render();
                 $counter++;
             }
             $filterTplData['filterfield'] = $filterField;
             $filterTplData['filterfieldcaption'] = isset($tvCaption[$filterField]) ? $tvCaption[$filterField] : $filterField;
-            $tpl = new xdbfChunkie($xdb->xdbconfig['filterTpl']);
+            $tpl = new evoChunkie($xdb->xdbconfig['filterTpl']);
             $tpl->addVar('xdbfilter', $filterTplData);
             $outerTplData['filterfields'] .= $tpl->Render();
             $filterTplData = array();
         }
     }
 
-    $tpl = new xdbfChunkie($xdb->xdbconfig['filterOuterTpl']);
+    $tpl = new evoChunkie($xdb->xdbconfig['filterOuterTpl']);
     $outerTplData['filterfieldnames'] = implode(',', $xdb->filterFields);
     $outerTplData['strings'] = $xdb->strings;
     $outerTplData['config'] = $xdb->xdbconfig;
