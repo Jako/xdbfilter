@@ -19,7 +19,7 @@
  * Parameters see README:
  */
 
-define(XDBFILTER_PATH, 'assets/snippets/xdbfilter/');
+define('XDBFILTER_PATH', 'assets/snippets/xdbfilter/');
 
 $output = '';
 include (MODX_BASE_PATH.XDBFILTER_PATH.'xdbfilter.php');
